@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Ninja Golds</title>
+</head>
+
+<body>
+    <section>
+        <div class="row">
+            <h3>Your gold:</h3>
+            <span>{{session["golds"]}}</span>
+            <form action="/process_money    " method="POST" class="reset-bt">
+                <input type="hidden" name="type" value="reset">
+                <button type="submit">Reset game</button>
+            </form>
+        </div>
+
+        <div class="row2">
+            <form action="/process_money" method="POST" class="form1" >
+                <h4>Farm</h4>
+                <p>(earns 10-20 golds)</p>
+                <input type="hidden" name="type" value="farm">
+                <button type="submit">Find gold</button>
+            </form>
+            <form action="/process_money" method="POST" class="form1">
+                <h4>Cave</h4>
+                <p>(earns 5-10 golds)</p>
+                <input type="hidden" name="type" value="cave">
+                <button type="submit">Find gold</button>
+            </form>
+            <form action="/process_money" method="POST" class="form1">
+                <h4>House</h4>
+                <p>(earns 2-5 golds)</p>
+                <input type="hidden" name="type" value="house">
+                <button type="submit">Find gold</button>
+            </form>
+            <form action="/process_money" method="POST" class="form1">
+                <h4>Casino</h4>
+                <p>(earns/takes 0-50 golds)</p>
+                <input type="hidden" name="type" value="casino">
+                <button type="submit">Find gold</button>
+            </form>
+        </div>
+
+        <h4>Activities:</h4>
+        <ul>
+            {% for x in session["goldHistoric"][::-1]%}
+            <li class="{{x[0]}}">{{x[1]}}</li>
+            {% endfor %}
+        </ul>
+    </section>
+</body>
+
+</html>

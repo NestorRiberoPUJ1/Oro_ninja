@@ -16,7 +16,7 @@
             <span>{{session["golds"]}}</span>
             <form action="/process_money    " method="POST" class="reset-bt">
                 <input type="hidden" name="type" value="reset">
-                <button type="submit">Reset game</button>
+                {{session["button"]|safe}}
             </form>
         </div>
 

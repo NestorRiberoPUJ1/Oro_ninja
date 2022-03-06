@@ -15,6 +15,8 @@ def formulario():
         session.clear()
         session["goldHistoric"] = []
         session["golds"] = 0
+        session["attemps"] = 0
+        session["button"] = ""
         start = False
 
     return render_template("index.html")
@@ -24,28 +26,36 @@ def formulario():
 def process_money():
     global start
 
+    session["attemps"] += 1
+
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     tipo = request.form["type"]
     color = "cl-green"
     gain = "Earned"
+
+    if(session["attemps"] >= 15):
+        if(session["golds"] >= 500):
+            session["button"] = "<button type=\"submit\">Winner</button>"
+        else:
+            session["button"] = "<button type=\"submit\">Looser</button>"
     if(tipo == "reset"):
-        start= True
+        start = True
         return redirect("/")
 
-    elif(tipo == "farm"):
-        earning = random.randint(10, 20)
-    elif(tipo == "cave"):
-        earning = random.randint(5, 10)
-    elif(tipo == "house"):
-        earning = random.randint(2, 5)
-    elif(tipo == "casino"):
-        earning = random.randint(-50, 50)
-        if (earning < 0):
-            color = "cl-red"
-            gain = "Wasted"
-    session["golds"] += earning
+    earning = {
+        "farm": random.randint(10, 20),
+        "cave": random.randint(5, 10),
+        "house": random.randint(2, 5),
+        "casino": random.randint(-50, 50)
+    }
+
+    if (earning[tipo] < 0):
+        color = "cl-red"
+        gain = "Wasted"
+
+    session["golds"] += earning[tipo]
     session["goldHistoric"].append(
-        [color, f"{gain} {earning} golds from the {tipo} ({now})"])
+        [color, f"{gain} {earning[tipo]} golds from the {tipo} ({now})"])
 
     return redirect("/")
 
